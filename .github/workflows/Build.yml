@@ -18,23 +18,23 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - name: macos-11
+          - name: macos-14
             arch: x86_64
           - name: macos-14
             arch: aarch64
         target:
           - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
-          - i686-unknown-linux-gnu
-          - i686-unknown-linux-musl
-          - aarch64-unknown-linux-gnu
-          - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-gnueabihf
-          - armv7-unknown-linux-musleabihf
-          - arm-unknown-linux-gnueabi
-          - arm-unknown-linux-gnueabihf
-          - arm-unknown-linux-musleabihf
-          - mipsel-unknown-linux-gnu
+          # - x86_64-unknown-linux-musl
+          # - i686-unknown-linux-gnu
+          # - i686-unknown-linux-musl
+          # - aarch64-unknown-linux-gnu
+          # - aarch64-unknown-linux-musl
+          # - armv7-unknown-linux-gnueabihf
+          # - armv7-unknown-linux-musleabihf
+          # - arm-unknown-linux-gnueabi
+          # - arm-unknown-linux-gnueabihf
+          # - arm-unknown-linux-musleabihf
+          # - mipsel-unknown-linux-gnu
     steps:
       - uses: actions/checkout@v3
       - name: Install crosstool-ng
@@ -56,7 +56,7 @@ jobs:
           set -ex
           mkdir /Volumes/build/src
           cd ${{ matrix.target }}
-          ct-ng build -j $(($(nproc) - 1))
+          ct-ng build -j $(($(nproc) + 1))
       - name: Tail build.log on failure
         if: ${{ failure() }}
         run: tail -n 500 ${{ matrix.target }}/build.log
