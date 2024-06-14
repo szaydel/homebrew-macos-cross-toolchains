@@ -39,10 +39,42 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install crosstool-ng
         run: |
-          brew install coreutils crosstool-ng
+          brew install \
+            autoconf \
+            automake \
+            bash \
+            binutils \
+            coreutils \
+            gawk \
+            gnu-sed \
+            gnu-tar \
+            help2man \
+            make \
+            ncurses \
+            texinfo \
+            libtool \
+            lzip
+
+          PATH="$PATH:$(brew --prefix)/opt/binutils/bin"
+          export PATH
+          CPPFLAGS="-I$(brew --prefix)/opt/ncurses/include -I$(brew --prefix)/opt/gettext/include"
+          export CPPFLAGS
+          LDFLAGS="-L$(brew --prefix)/opt/ncurses/lib -L$(brew --prefix)/opt/gettext/lib"
+          export LDFLAGS
+
+          git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng
+          (
+            cd crosstool-ng &&
+            ./bootstrap &&
+            ./configure --prefix="$HOME/.local/" &&
+            make &&
+            make install
+          )
+          # brew install coreutils crosstool-ng
           # fix python env in the runner
           brew unlink python@3.11 && brew link --overwrite python@3.11
           python3 --version
+          echo "current path: $PATH"
       - name: Mount volumes
         run: |
           set -ex
