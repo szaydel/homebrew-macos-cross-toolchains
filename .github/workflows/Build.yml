@@ -44,6 +44,7 @@ jobs:
             automake \
             bash \
             binutils \
+            bison \
             coreutils \
             gawk \
             gnu-sed \
@@ -55,11 +56,11 @@ jobs:
             libtool \
             lzip
 
-          PATH="$PATH:$(brew --prefix)/opt/binutils/bin"
+          PATH="$(brew --prefix)/opt/binutils/bin:$(brew --prefix)/opt/bison/bin:$PATH"
           export PATH
           CPPFLAGS="-I$(brew --prefix)/opt/ncurses/include -I$(brew --prefix)/opt/gettext/include"
           export CPPFLAGS
-          LDFLAGS="-L$(brew --prefix)/opt/ncurses/lib -L$(brew --prefix)/opt/gettext/lib"
+          LDFLAGS="-L$(brew --prefix)/opt/ncurses/lib -L$(brew --prefix)/opt/gettext/lib -L$(brew --prefix)/opt/bison/lib"
           export LDFLAGS
 
           git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng
